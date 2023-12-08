@@ -1,6 +1,8 @@
-//import logo from './logo.svg';
+import logo from './logo.svg';
 import './App.css';
 import './slot-machine.css';
+import { GoogleOAuthProvider } from '@react-oauth/google';
+import Google from './google';
 
 (function () {
   const items = [
@@ -107,6 +109,13 @@ import './slot-machine.css';
 function App() {
   return (
     <div className="App">
+      <header className="App-header">
+        <img src={logo} className="App-logo" alt="logo" />
+
+        <GoogleOAuthProvider clientId="851868174218-nla57r13epclmu2satd69v9bof70pmj3.apps.googleusercontent.com">
+          <Google />
+        </GoogleOAuthProvider>
+      </header>
     </div>
   );
 }
