@@ -1,8 +1,10 @@
-import logo from './logo.svg';
+//import logo from './logo.svg';
 import './App.css';
 import './slot-machine.css';
-import { GoogleOAuthProvider } from '@react-oauth/google';
-import Google from './google';
+import React from 'react';
+import { GoogleLogin } from 'react-google-login';
+
+const clientID = 'slot-machine-407516';
 
 (function () {
   const items = [
@@ -107,15 +109,29 @@ import Google from './google';
 
 
 function App() {
+  const onSuccess = (res) => {
+    console.log('Login Success: currentUser:', res.profileObj);
+    alert(
+      `Logged in successfully with: ${res.profileObj.name}!`,
+    );
+  };
+
+  const onFailure = (res) => {
+    console.log('Login failed: res:', res);
+    alert(
+      `Failed to log in. Please try again.`,
+    );
+  };
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-
-        <GoogleOAuthProvider clientId="851868174218-nla57r13epclmu2satd69v9bof70pmj3.apps.googleusercontent.com">
-          <Google />
-        </GoogleOAuthProvider>
-      </header>
+      <GoogleLogin
+        clientID={clientID}
+        buttonText="Login with Google"
+        onSuccess={onSuccess}
+        onFailure={onFailure}
+        cookiePolicy={'single_host_origin'}
+      />
     </div>
   );
 }
