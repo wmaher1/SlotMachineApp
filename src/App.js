@@ -4,7 +4,6 @@ import './slot-machine.css';
 import React from 'react';
 import { GoogleLogin } from 'react-google-login';
 
-const clientID = 'slot-machine-407516';
 
 (function () {
   const items = [
@@ -109,29 +108,9 @@ const clientID = 'slot-machine-407516';
 
 
 function App() {
-  const onSuccess = (res) => {
-    console.log('Login Success: currentUser:', res.profileObj);
-    alert(
-      `Logged in successfully with: ${res.profileObj.name}!`,
-    );
-  };
-
-  const onFailure = (res) => {
-    console.log('Login failed: res:', res);
-    alert(
-      `Failed to log in. Please try again.`,
-    );
-  };
 
   return (
     <div className="App">
-      <GoogleLogin
-        clientID={clientID}
-        buttonText="Login with Google"
-        onSuccess={onSuccess}
-        onFailure={onFailure}
-        cookiePolicy={'single_host_origin'}
-      />
     </div>
   );
 }
