@@ -1,25 +1,23 @@
 import React from 'react';
 import { GoogleLogin } from 'react-google-login';
 
-const SignIn = () => {
-  const responseMessage = (response) => {
-    console.log('Google login successful:', response);
-  };
-
-  const errorMessage = (error) => {
-    console.error('Google login error:', error);
+const SignIn = ({ onSignIn }) => {
+  const responseGoogle = (response) => {
+    if (response.profileObj) {
+      onSignIn(response.profileObj);
+    }
   };
 
   return (
     <div>
-      <h2>Login Page</h2>
-      {/* Use the GoogleLogin component */}
+      <h2>Sign In with Google</h2>
       <GoogleLogin
         clientId="554028928492-gvjnv380u7uv4va2pi492g1h9cua8bkk.apps.googleusercontent.com"
-        onSuccess={responseMessage}
-        onError={errorMessage}
+        buttonText="Login with Google"
+        onSuccess={responseGoogle}
+        onFailure={responseGoogle}
+        cookiePolicy={'single_host_origin'}
       />
-      {/* Add other login form elements if needed */}
     </div>
   );
 };

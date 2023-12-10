@@ -1,11 +1,8 @@
 import './App.css';
 import './slot-machine.css';
-import React, { useState } from 'react';
-//import { GoogleLogin } from '@react-oauth/google';
-import { BrowserRouter as Router, Route, Link, Redirect, Switch } from 'react-router-dom';
-import SignIn from './SignIn';
+import React from 'react';
 
-(function SlotMachine() {
+(function () {
   const items = [
     '❄️',
     '🍒',
@@ -105,48 +102,11 @@ import SignIn from './SignIn';
 
   init();
 })();
-
-
-function App() {
-  const [user, setUser] = useState(null);
-
-  const handleLogout = () => {
-    // Clear the user's authentication state
-    setUser(null);
-    // Add any additional logout logic you may need (e.g., redirect to login page)
-  };
-
+  
+function App () {
   return (
-    <Router>
-      <div className="App">
-        <h2>Google Login</h2>
-        <Switch>
-          <Route path="/login" component={SignIn} />
-          <Route path="/game">
-            {user ? (
-              <GameComponent />
-            ) : (
-              <Redirect to="/login" />
-            )}
-          </Route>
-          <Route path="/">
-            {user ? (
-              <div>
-                <p>Welcome, {user.name}!</p>
-                <button onClick={handleLogout}>Logout</button>
-                {/* Rendering game */}
-                <SlotMachine /> 
-                <p>Click below to play your game:</p>
-                <a href="/game">Play Game</a>
-              </div>
-            ) : (
-              <Redirect to="/login" />
-            )}
-          </Route>
-        </Switch>
-      </div>
-    </Router>
+    <div className='App'>
+    </div>
   );
-}
-
+};
 export default App;
