@@ -1,8 +1,57 @@
 //import logo from './logo.svg';
 import './App.css';
 import './slot-machine.css';
-import React from 'react';
-import { GoogleLogin } from 'react-google-login';
+import React, { useState, useEffect } from 'react';
+
+const clientId = "554028928492-gvjnv380u7uv4va2pi492g1h9cua8bkk.apps.googleusercontent.com";
+
+const App = () => {
+  const [authInstance, setAuthInstance] = useState(null);
+  const [user, setUser] = useState(null);
+ 
+  useEffect(() => {
+     // Initialize the Google Auth library.
+     window.gapi.load('client:auth2', () => {
+       window.gapi.client.init({
+         clientId: clientId,
+         scope: 'profile email',
+       }).then(() => {
+         setAuthInstance(window.gapi.auth2.getAuthInstance());
+       });
+     });
+  }, []);
+
+  const signIn = () => {
+    authInstance.signIn().then((googleUser) => {
+      setUser(googleUser.getBasicProfile());
+    });
+ };
+
+  const signOut = () => {
+    authInstance.signOut().then(() => {
+      setUser(null);
+    });
+  };
+
+  return (
+    <div className="App">
+      {!user && (
+        <button onClick={signIn}>Sign in with Google</button>
+      )}
+      {user && (
+        <div>
+          <img src={user.getImageUrl()} alt={user.getName()} />
+          <h3>{user.getName()}</h3>
+          <p>{user.getEmail()}</p>
+          <button onClick={signOut}>Sign out</button>
+        </div>
+      )}
+      {/* The rest of your application */}
+    </div>
+ );
+};
+
+export default App;
 
 
 (function () {
@@ -107,12 +156,4 @@ import { GoogleLogin } from 'react-google-login';
 })();
 
 
-function App() {
 
-  return (
-    <div className="App">
-    </div>
-  );
-}
-
-export default App;
