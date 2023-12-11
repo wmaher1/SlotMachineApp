@@ -189,8 +189,6 @@ function App () {
 
   return (
     <div className='App'>
-      <button id="spinner">Spin</button>
-      <button id="reseter">Reset</button>
     </div>
   );
 };
