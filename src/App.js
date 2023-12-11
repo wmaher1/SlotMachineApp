@@ -1,11 +1,7 @@
 import './App.css';
 import './slot-machine.css';
 import React, { useEffect } from 'react';
-//import { initializeApp } from 'firebase/app';
-//import { getDatabase } from 'firebase/database';
 import { database } from './firebaseConfig';
-
-
 
 
 (function () {
@@ -114,7 +110,6 @@ const statsRef = database.ref('stats');
 
 function App () {
   useEffect(() => {
-
     statsRef.on('value', (snapshot) => {
       const totalWins = snapshot.val().totalWins;
       console.log('Total Wins:', totalWins);
@@ -170,6 +165,8 @@ function App () {
     const firstDoorItems = doors[0].querySelectorAll('.box');
     const firstItem = firstDoorItems[0].textContent;
   
+    console.log('Updating slot machine with result:', result);
+
     // Increment the totalPlays counter
     const playsRef = database.ref('stats/totalPlays');
     await playsRef.transaction((currentPlays) => {
@@ -198,6 +195,8 @@ function App () {
 
   return (
     <div className='App'>
+      <button id="spinner">Spin</button>
+      <button id="reseter">Reset</button>
     </div>
   );
 };
