@@ -1,6 +1,12 @@
 import './App.css';
 import './slot-machine.css';
-import React from 'react';
+import React, { useEffect } from 'react';
+//import { initializeApp } from 'firebase/app';
+//import { getDatabase } from 'firebase/database';
+import { database } from './firebaseConfig';
+
+
+
 
 (function () {
   const items = [
@@ -103,10 +109,97 @@ import React from 'react';
   init();
 })();
   
+
+const statsRef = database.ref('stats');
+
 function App () {
+  useEffect(() => {
+
+    statsRef.on('value', (snapshot) => {
+      const totalWins = snapshot.val().totalWins;
+      console.log('Total Wins:', totalWins);
+    });
+    
+    // incrementing wins
+    const incrementWins = async () => {
+      const statsRef = database.ref('stats');
+      await statsRef.transaction((currentData) => {
+        if (currentData === null) {
+          return { totalWins: 1 };
+        } else {
+          return { totalWins: (currentData.totalWins || 0) + 1 };
+        }
+      });
+    };
+
+    
+    const handleWin = () => {
+      // Check if all items in the slot machine are the same
+      const doors = document.querySelectorAll('.door');
+      const firstDoorItems = doors[0].querySelectorAll('.box');
+      const firstItem = firstDoorItems[0].textContent;
+
+      const isWin = Array.from(doors).every((door) => {
+        const items = door.querySelectorAll('.box');
+        return Array.from(items).every((item) => item.textContent === firstItem);
+      });
+
+      if (isWin) {
+        // Additional logic for winning
+        incrementWins(); // Increment the totalWins count in Firebase
+      }
+    };
+
+    // Example: Trigger handleWin when the user spins (modify based on your game logic)
+    document.querySelector('#spinner').addEventListener('click', () => {
+      // Your existing spin logic...
+
+      // Simulate the result for demonstration purposes (modify based on your actual logic)
+      const result = ['💰', '💰', '💰']; // Assume all items are the same
+      updateSlotMachine(result);
+
+      // Check for a win
+      handleWin();
+    });
+  }, []);
+
+  // Your existing functions...
+  const updateSlotMachine = async (result) => {
+    // Your existing logic...
+    const doors = document.querySelectorAll('.door');
+    const firstDoorItems = doors[0].querySelectorAll('.box');
+    const firstItem = firstDoorItems[0].textContent;
+  
+    // Increment the totalPlays counter
+    const playsRef = database.ref('stats/totalPlays');
+    await playsRef.transaction((currentPlays) => {
+      console.log('Incrementing totalPlays by 1');
+      return (currentPlays || 0) + 1;
+    });
+  
+    // Check if the result is a win
+    const isWin = Array.from(doors).every((door) => {
+      const items = door.querySelectorAll('.box');
+      return Array.from(items).every((item) => item.textContent === firstItem);
+    });
+  
+    // If it's a win, increment the totalWins counter
+    if (isWin) {
+      const winsRef = database.ref('stats/totalWins');
+      await winsRef.transaction((currentWins) => {
+        console.log('Incrementing totalWins by 1');
+        return (currentWins || 0) + 1;
+      });
+    }
+  };
+
+
+
+
   return (
     <div className='App'>
     </div>
   );
 };
+
 export default App;
