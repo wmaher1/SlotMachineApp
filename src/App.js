@@ -4,6 +4,7 @@ import React, { useEffect } from 'react';
 import { database } from './firebaseConfig';
 
 
+
 (function () {
   const items = [
     '❄️',
@@ -140,14 +141,11 @@ function App () {
       });
 
       if (isWin) {
-        // Additional logic for winning
-        incrementWins(); // Increment the totalWins count in Firebase
+        incrementWins(); 
       }
     };
 
-    // Example: Trigger handleWin when the user spins (modify based on your game logic)
     document.querySelector('#spinner').addEventListener('click', () => {
-      // Your existing spin logic...
 
       // Simulate the result for demonstration purposes (modify based on your actual logic)
       const result = ['💰', '💰', '💰']; // Assume all items are the same
@@ -158,9 +156,7 @@ function App () {
     });
   }, []);
 
-  // Your existing functions...
   const updateSlotMachine = async (result) => {
-    // Your existing logic...
     const doors = document.querySelectorAll('.door');
     const firstDoorItems = doors[0].querySelectorAll('.box');
     const firstItem = firstDoorItems[0].textContent;
@@ -174,13 +170,11 @@ function App () {
       return (currentPlays || 0) + 1;
     });
   
-    // Check if the result is a win
     const isWin = Array.from(doors).every((door) => {
       const items = door.querySelectorAll('.box');
       return Array.from(items).every((item) => item.textContent === firstItem);
     });
   
-    // If it's a win, increment the totalWins counter
     if (isWin) {
       const winsRef = database.ref('stats/totalWins');
       await winsRef.transaction((currentWins) => {
